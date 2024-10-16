@@ -9,6 +9,10 @@
 # B1: Thêm các modun cần thiết
 import sys
 import io
+
+from tkinter import Tk, Label, Entry, LabelFrame
+
+from tkinter import *
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import matplotlib.pyplot as plt #tạo đồ thị
 import numpy as np # xử lý các mảng, ma trận => dùng trong phép biến đổi
@@ -21,14 +25,14 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples # đánh giá mức độ tốt của việc phân cụm
 from sklearn.preprocessing import StandardScaler
 # Đọc vào file csv
-data = pd.read_csv('data_customers.csv')
+data = pd.read_csv('data_customers_xuly.csv')
 
 # Thống kê các trường mô tả của bộ dữ liệu
-data_customers = data.groupby("Customer ID")[['Sales', 'Quantity', 'Discount','Order ID', 'Profit']]\
-.agg({'Sales':'sum','Quantity':'sum','Discount':'mean','Order ID':'count','Profit':'sum'})\
-.reset_index()
+# data_customers = data.groupby("Customer ID")[['Sales', 'Quantity', 'Discount','Order ID', 'Profit']]\
+# .agg({'Sales':'sum','Quantity':'sum','Discount':'mean','Order ID':'count','Profit':'sum'})\
+# .reset_index()
 
-data_customers.describe()
+# data_customers.describe()
 
 #chọn các cột là dữ liệu số
 numeric_columns = data.select_dtypes(include=[np.number])
@@ -124,118 +128,114 @@ print("\nTong so mau trong moi cum: \n", cluster_count)
 score = silhouette_score(X_scaler, X['Cum'])
 print("\nMuc do phu hop Silhouette_score = ", score)
 
-from tkinter import Tk, Label, Entry, LabelFrame
+# # Tạo form
+# form = Tk()  
+# form.title("Dự đoán phân khúc khách hàng")
+# form.geometry("1000x600")
 
-from tkinter import *
+# # Tiêu đề form
+# lable_dudoan = Label(form, text="Dự đoán phân khúc khách hàng", font=("Arial", 20), fg="brown")
+# lable_dudoan.grid(row=0, column=1, pady=10, sticky="e")
 
-# Tạo form
-form = Tk()  
-form.title("Dự đoán phân khúc khách hàng")
-form.geometry("1000x600")
+# # Nhóm nhập thông tin
+# group1 = LabelFrame(form, text="Nhập thông tin để dự đoán", padx=10, pady=10)
+# group1.grid(row=1, column=1, padx=50, pady=30)
 
-# Tiêu đề form
-lable_dudoan = Label(form, text="Dự đoán phân khúc khách hàng", font=("Arial", 20), fg="brown")
-lable_dudoan.grid(row=0, column=1, pady=10, sticky="e")
+# # Nhãn và textbox cho các trường nhập liệu
+# fields = ["Sales", "Quantity", "Discount", "Order ID", "Profit"]
+# textboxes = {}
 
-# Nhóm nhập thông tin
-group1 = LabelFrame(form, text="Nhập thông tin để dự đoán", padx=10, pady=10)
-group1.grid(row=1, column=1, padx=50, pady=30)
-
-# Nhãn và textbox cho các trường nhập liệu
-fields = ["Sales", "Quantity", "Discount", "Order ID", "Profit"]
-textboxes = {}
-
-for i, field in enumerate(fields):
-    lable = Label(group1, text=f"{field}:")
-    lable.grid(row=i + 1, column=1, pady=10, sticky="e")
+# for i, field in enumerate(fields):
+#     lable = Label(group1, text=f"{field}:")
+#     lable.grid(row=i + 1, column=1, pady=10, sticky="e")
     
-    textbox = Entry(group1, width=30)
-    textbox.grid(row=i + 1, column=2)
-    textboxes[field] = textbox  # Lưu trữ textbox vào dictionary để sử dụng sau
+#     textbox = Entry(group1, width=30)
+#     textbox.grid(row=i + 1, column=2)
+#     textboxes[field] = textbox  # Lưu trữ textbox vào dictionary để sử dụng sau
 
-group2 = LabelFrame(form, bd=0)
-group2.grid(row=1, column=2)
-group3 = LabelFrame(group2, text="Đánh giá mô hình được chọn:")
-group3.grid(row=1, column=1, pady=20)
+# group2 = LabelFrame(form, bd=0)
+# group2.grid(row=1, column=2)
+# group3 = LabelFrame(group2, text="Đánh giá mô hình được chọn:")
+# group3.grid(row=1, column=1, pady=20)
 
-lable_ketqua = Label(group2, text = "Kết quả(true/false)", font=("Arial italic", 8)).grid(row = 3, column = 1, pady = 10)
+# lable_ketqua = Label(group2, text = "Kết quả", font=("Arial italic", 8)).grid(row = 3, column = 1, pady = 10)
 
-lb_num = Label(group3)
-lb_num.grid(row=1, column=1, padx = 35, pady = 20)
-centroids_str = "Cụm\tSales \t Quantity \t Discount \t Order ID \t Profit\n"
-for index, row in centroids.iterrows():
-    cluster_number = int(index)
-    centroids_str += f"{cluster_number} \t {row['Sales']:.6f} \t {row['Quantity']:.6f} \t {row['Discount']:.6f} \t {row['Order ID']:.6f} \t {row['Profit']:.6f}\n"
-lb_num.configure(text = str(centroids_str))
-lb_num = Label(group3)
-lb_num.grid(row=2, column=1, padx = 35, pady = 20)
-lb_num.configure(text = "Mức độ phù lợp Silhouette_score: "+str(score))
+# lb_num = Label(group3)
+# lb_num.grid(row=1, column=1, padx = 35, pady = 20)
+# centroids_str = "Cụm\tSales \t Quantity \t Discount \t Order ID \t Profit\n"
+# for index, row in centroids.iterrows():
+#     cluster_number = int(index)
+#     centroids_str += f"{cluster_number} \t {row['Sales']:.6f} \t {row['Quantity']:.6f} \t {row['Discount']:.6f} \t {row['Order ID']:.6f} \t {row['Profit']:.6f}\n"
+# lb_num.configure(text = str(centroids_str))
+# lb_num = Label(group3)
+# lb_num.grid(row=2, column=1, padx = 35, pady = 20)
+# lb_num.configure(text = "Mức độ phù lợp Silhouette_score: "+str(score))
 
-def dudoan():
-        Sale = textboxes['Sales'].get()
-        quantity = textboxes['Quantity'].get()
-        discount = textboxes['Discount'].get()
-        orderid = textboxes['Order ID'].get()
-        profit = textboxes['Profit'].get()
-        if((Sale == '') or (quantity == '') or (discount == '') or (orderid == '') or (profit == '')):
-            messagebox.showinfo("Thông báo", "Bạn cần nhập đẩy đủ thông tin!")
-        else:
-            x_dudoan = pd.DataFrame({
-            'Sales': [float(Sale)],
-            'Quantity': [float(quantity)],
-            'Discount': [float(discount)],
-            'Order ID': [float(orderid)],
-            'Profit': [float(profit)]
-        })
+# def dudoan():
+#         Sale = textboxes['Sales'].get()
+#         quantity = textboxes['Quantity'].get()
+#         discount = textboxes['Discount'].get()
+#         orderid = textboxes['Order ID'].get()
+#         profit = textboxes['Profit'].get()
+#         if((Sale == '') or (quantity == '') or (discount == '') or (orderid == '') or (profit == '')):
+#             messagebox.showinfo("Thông báo", "Bạn cần nhập đẩy đủ thông tin!")
+#         else:
+#             x_dudoan = pd.DataFrame({
+#             'Sales': [float(Sale)],
+#             'Quantity': [float(quantity)],
+#             'Discount': [float(discount)],
+#             'Order ID': [float(orderid)],
+#             'Profit': [float(profit)]
+#         })
 
-        min_d = float('inf')
-        C = 1
-        for index1, row in centroids.iterrows():
-            d = distance(row, x_dudoan.iloc[0])  # Truy cập hàng đầu tiên của DataFrame mới
-            if d < min_d:
-                min_d = d
-                C = index1
+#         min_d = float('inf')
+#         C = 1
+#         for index1, row in centroids.iterrows():
+#             d = distance(row, x_dudoan.iloc[0])  # Truy cập hàng đầu tiên của DataFrame mới
+#             if d < min_d:
+#                 min_d = d
+#                 C = index1
         
-        lb_pred.configure(text= "Cụm: " + str(C))
+#         lb_pred.configure(text= "Cụm: " + str(C))
 
-button_1 = Button(group2, text = 'Kết quả dự đoán', font=("Arial Bold", 9), fg = "black", bg = "green", command = dudoan)
-button_1.grid(row = 2, column = 1)
-lb_pred = Label(group2, text="...", font=("Arial Bold", 9), fg = "white", bg = "SlateGray4")
-lb_pred.grid(row=4, column=1)
+# button_1 = Button(group2, text = 'Kết quả dự đoán', font=("Arial Bold", 9), fg = "black", bg = "green", command = dudoan)
+# button_1.grid(row = 2, column = 1)
+# lb_pred = Label(group2, text="...", font=("Arial Bold", 9), fg = "white", bg = "SlateGray4")
+# lb_pred.grid(row=4, column=1)
 
-# Bắt đầu vòng lặp Tkinter
-form.mainloop()
-
-
-# #Lay các giá trị x và y để vẽ hừn
-# x = X['Sales'].values
-# y = X['Profit'].values
+# # Bắt đầu vòng lặp Tkinter
+# form.mainloop()
 
 
-# colors = X['Cum'].astype(int).values  # Chuyển đổi nhãn cụm thành kiểu số
+#Lay các giá trị x và y để vẽ hừn
+x = X['Sales'].values
+y = X['Profit'].values
 
-# # Lấy tâm cụm
-# # centroids = X.groupby("Cum").mean()[['Pregnancies', "Glucose", "BloodPressure", "SkinThickness", "Insulin", "free_sulfur_dioxide", "DiabetesPedigreeFunction", "Age"]]
 
-# # Vẽ biểu đồ
-# plt.figure(figsize=(10, 6))
-# scatter = plt.scatter(x, y, c=colors, marker='o', alpha=0.6, edgecolors='k', cmap='viridis')
+colors = X['Cum'].astype(int).values  # Chuyển đổi nhãn cụm thành kiểu số
 
-# # Vẽ tâm cụm
-# for i, centroid in centroids.iterrows():
-#     plt.scatter(centroid['Profit'], centroid['Sales'], c='red', marker='X', s=200, label=f'Centroid {i}')
+# Lấy tâm cụm
+# centroids = X.groupby("Cum").mean()[['Pregnancies', "Glucose", "BloodPressure", "SkinThickness", "Insulin", "free_sulfur_dioxide", "DiabetesPedigreeFunction", "Age"]]
 
-# # Thêm nhãn cho trục
-# plt.xlabel('Sales', fontsize=16)
-# plt.ylabel('Profit', fontsize=16)
-# # plt.('BloodPressure', fontsize=16)
+# Vẽ biểu đồ
+plt.figure(figsize=(10, 6))
+scatter = plt.scatter(x, y, c=colors, marker='o', alpha=0.6, edgecolors='k', cmap='viridis')
 
-# plt.title("Customer Clustering Chart", fontsize=18)
+# Vẽ tâm cụm
+for i, centroid in centroids.iterrows():
+    plt.scatter(centroid['Profit'], centroid['Sales'], c='red', marker='X', s=200, label=f'Centroid {i}')
 
-# # Thêm legend để phân biệt các tâm cụm
-# plt.legend(loc='upper right')
+# Thêm nhãn cho trục
+plt.xlabel('Sales', fontsize=16)
+plt.ylabel('Profit', fontsize=16)
+# plt.('BloodPressure', fontsize=16)
 
-# # Hiển thị biểu đồ
-# plt.show()
+plt.title("Customer Clustering Chart", fontsize=18)
+
+# Thêm legend để phân biệt các tâm cụm
+plt.legend(loc='upper right')
+
+# Hiển thị biểu đồ
+plt.show()
 
 
